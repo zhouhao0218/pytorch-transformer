@@ -264,4 +264,18 @@ def build_transformer(src_vocab_size: int, tgt_vocab_size: int, src_seq_len: int
         if p.dim() > 1:
             nn.init.xavier_uniform_(p)
     
+    # Initialize linear layers with Xavier for better convergence
+    for p in transformer.parameters():
+        if isinstance(p, nn.Linear):
+            nn.init.xavier_uniform_(p)
+
+    # Initialize positional encoding parameters with a different strategy
+    for p in transformer.src_pos.parameters():
+        if p.dim() > 1:
+            nn.init.normal_(p, mean=0, std=0.1)
+
+    for p in transformer.tgt_pos.parameters():
+        if p.dim() > 1:
+            nn.init.normal_(p, mean=0, std=0.1)
+    
     return transformer
